@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 `;
 
 const App: React.FC = () => {
-  const [isGameStarted] = useState(true);
+  const [isGameStarted] = useState(false);
 
   return (
     <AppContainer>

@@ -1,0 +1,6 @@
+query Score($id: ID!) {
+    score(id: $id) {
+        author
+        elapsedTime
+    }
+}

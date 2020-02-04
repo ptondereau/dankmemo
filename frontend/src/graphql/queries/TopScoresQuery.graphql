@@ -1,0 +1,12 @@
+query TopScores {
+    scores(first: 10) {
+        edges {
+            node {
+                ...on Score {
+                    author
+                    elapsedTime
+                }
+            }
+        }
+    }
+}

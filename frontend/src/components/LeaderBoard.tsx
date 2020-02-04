@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Score from './Score';
+import { useTopScoresLazyQuery } from '../graphql/components';
 
 const LeaderBoardContainer = styled.div`
   height: 50vh;
@@ -11,6 +12,16 @@ const LeaderBoardContainer = styled.div`
 `;
 
 const LeaderBoard: React.FC = () => {
+  const [scores, { loading, data }] = useTopScoresLazyQuery();
+
+  useEffect(() => {
+    scores();
+  }, [scores]);
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <LeaderBoardContainer>
       <h2>
@@ -22,11 +33,20 @@ const LeaderBoard: React.FC = () => {
           🏆
         </span>
       </h2>
-      <Score name="Pierre" timeElapsed="00:02:00" rank={1} />
-      <Score name="Pierre" timeElapsed="00:03:00" rank={2} />
-      <Score name="Pierre" timeElapsed="00:04:00" rank={3} />
-      <Score name="Pierre" timeElapsed="00:05:00" rank={4} />
-      <Score name="Pierre" timeElapsed="00:06:00" rank={5} />
+      {data &&
+        data.scores?.edges?.map((score, index) => {
+          if (score) {
+            // @ts-ignore
+            return (
+              <Score
+                key={index}
+                name={score.node?.author}
+                timeElapsed={score.node?.elapsedTime}
+                rank={index + 1}
+              />
+            );
+          }
+        })}
     </LeaderBoardContainer>
   );
 };
