@@ -80,8 +80,6 @@ const GameBoard: React.FC = () => {
     }
   });
 
-  console.log(firstCard, secondCard);
-
   return (
     <GameBoardContainer>
       <CardsContainer>
