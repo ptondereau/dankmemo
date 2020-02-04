@@ -1,10 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import Card from "./Card";
+import React, { useEffect } from 'react';
+import styled from 'styled-components/macro';
+import Card from './Card';
+import useGameStore from '../hooks/useGameStore';
+import { observer } from 'mobx-react-lite';
 
 const GameBoardContainer = styled.div`
-  height: 70vh;
-  width: 100vw;
+  min-height: 500px;
+  width: 60%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,42 +14,101 @@ const GameBoardContainer = styled.div`
 `;
 
 const CardsContainer = styled.div`
-    width: calc(100vw - (16 * 12));
-    height: calc(100vh - (16 * 12));
-    margin: 16 * 6;
-    display: grid;
-    grid-template-columns: repeat(6, auto);
-    grid-template-rows: repeat(3, 1fr);
-    grid-gap: 16px;
-
-    @media screen and (max-width: 450px) and (min-height: 650px) {
-        grid-template-columns: repeat(4, auto);
-        grid-template-rows: repeat(5, 1fr);
-    }
-
-    @media screen and (min-width: 1400px) and (max-height: 800px) {
-        grid-template-columns: repeat(9, auto);
-        grid-template-rows: repeat(2, 1fr);
-    }
-    @media screen and (min-width: 600px) and (max-height: 500px) {
-        grid-template-columns: repeat(9, auto);
-        grid-template-rows: repeat(2, 1fr);
-    }
-
-    @include media-breakpoint-down(md) {
-        width: calc(100vw - (16 * 2));
-        height: calc(100vh - (16 * 2));
-        margin: 16px;
-        grid-gap: 16 / 2;
-    }
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-content: center;
 `;
 
 const GameBoard: React.FC = () => {
-  return <GameBoardContainer>
-       <CardsContainer>
-          <Card />
+  const {
+    cards,
+    firstCard,
+    secondCard,
+    setCardCanFlip,
+    setCardFlipped,
+    setFirstSelectedCard,
+    setSecondSelectedCard,
+  } = useGameStore();
+
+  const resetFirstAndSecondCards = () => {
+    setFirstSelectedCard(null);
+    setSecondSelectedCard(null);
+  };
+
+  const onSuccessGuess = () => {
+    if (firstCard) {
+      setCardCanFlip(firstCard.id, false);
+      setCardFlipped(firstCard.id, false);
+    }
+
+    if (secondCard) {
+      setCardCanFlip(secondCard.id, false);
+      setCardFlipped(secondCard.id, false);
+    }
+
+    resetFirstAndSecondCards();
+  };
+
+  const onFailureGuess = () => {
+    const firstCardID = firstCard?.id;
+    const secondCardID = secondCard?.id;
+
+    if (firstCardID) {
+      setTimeout(() => {
+        setCardFlipped(firstCardID, true);
+      }, 1000);
+    }
+
+    if (secondCardID) {
+      setTimeout(() => {
+        setCardFlipped(secondCardID, true);
+      }, 1200);
+    }
+
+    resetFirstAndSecondCards();
+  };
+
+  useEffect(() => {
+    if (firstCard && secondCard) {
+      firstCard.imageSrc === secondCard.imageSrc
+        ? onSuccessGuess()
+        : onFailureGuess();
+    }
+  });
+
+  console.log(firstCard, secondCard);
+
+  return (
+    <GameBoardContainer>
+      <CardsContainer>
+        {cards.map(card => (
+          <Card
+            key={card.id.toString()}
+            flipped={card.flipped}
+            imageSource={card.imageSrc}
+            onClick={() => {
+              if (!card.canFlip) return;
+
+              if (
+                (firstCard && card.id === firstCard.id) ||
+                (secondCard && card.id === secondCard.id)
+              )
+                return;
+
+              setCardFlipped(card.id, false);
+              firstCard
+                ? setSecondSelectedCard(card)
+                : setFirstSelectedCard(card);
+            }}
+          />
+        ))}
       </CardsContainer>
-  </GameBoardContainer>;
+    </GameBoardContainer>
+  );
 };
 
-export default GameBoard;
+export default observer(GameBoard);

@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled from 'styled-components/macro';
 import Header from './Header';
 import GameBoard from './GameBoard';
-import LeaderBoard from "./LeaderBoard";
+import LeaderBoard from './LeaderBoard';
 
 const AppContainer = styled.div`
   display: flex;
@@ -13,14 +13,23 @@ const AppContainer = styled.div`
   background: linear-gradient(#e66465, #9198e5);
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+`;
+
 const App: React.FC = () => {
-  const [isGameStarted] = useState(false);
+  const [isGameStarted] = useState(true);
 
   return (
     <AppContainer>
-      <Header />
-      {isGameStarted && <GameBoard />}
-      {!isGameStarted && <LeaderBoard />}
+      <Wrapper>
+        <Header />
+        {isGameStarted && <GameBoard />}
+        {!isGameStarted && <LeaderBoard />}
+      </Wrapper>
     </AppContainer>
   );
 };

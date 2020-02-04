@@ -1,14 +1,14 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import mememan from '../assets/images/meme-man.png';
 
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: center;
   align-items: stretch;
   align-content: stretch;
-  max-height: 40vh;
-  padding-top: 10vh;
+  max-height: 200px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 `;
 
 const MemeManAnimation = keyframes`
@@ -39,7 +39,10 @@ const HeaderTitle = styled.h1`
 const Header: React.FC = () => {
   return (
     <HeaderContainer>
-      <MemeMan src={mememan} alt="Meme man logo" />
+      <MemeMan
+        src={require('../assets/images/meme-man.png')}
+        alt="Meme man logo"
+      />
       <HeaderTitle>Dank Memo</HeaderTitle>
     </HeaderContainer>
   );
