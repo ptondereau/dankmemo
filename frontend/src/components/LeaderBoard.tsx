@@ -36,11 +36,12 @@ const LeaderBoard: React.FC = () => {
       {data &&
         data.scores?.edges?.map((score, index) => {
           if (score) {
-            // @ts-ignore
             return (
               <Score
                 key={index}
+                // @ts-ignore ici on est sur que le node n'est pas nul
                 name={score.node?.author}
+                // @ts-ignore ici on est sur que le node n'est pas nul
                 timeElapsed={score.node?.elapsedTime}
                 rank={index + 1}
               />
