@@ -20,12 +20,20 @@ export interface GameStoreInitialState {
   readonly isStarted: boolean;
 }
 
+/*
+  C'est ici que reside le coeur du jeu. Voyez ca comme un entrepot de donnees partage entre plusieurs composents.
+  Une carte possede une URL, une autorisation a pouvoir etre retourne, son etat (retourne ou pas) et un Id unique.
+ */
 export class GameStore {
   public cards = observable.array<CardItem>([], { deep: false });
 
   @observable public firstCard: CardItem | null;
   @observable public secondCard: CardItem | null;
+
+  // Le timer de la session de jeu.
   @observable public elapsedTime: number = 0;
+
+  // L'etat de la session de jeu. (demarre ou pas).
   @observable public isStarted: boolean = false;
 
   constructor() {
@@ -35,14 +43,19 @@ export class GameStore {
   }
 
   protected generateGame = (): void => {
+    // on genere un tableau d'objet a partir de la liste de carte dispo
+    // on le melange
     const generatedCards = this.shuffleArray(cards)
+      // on le divise en 2
       .slice(0, 20 / 2)
+      // on genere nos objets
       .map(imageURL => ({
         id: uuid.v4(),
         imageSrc: `/images/cards/${imageURL}`,
         flipped: true,
         canFlip: true,
       }))
+      // on raccroche le meme tableau d'objet pour avoir 20 cartes mais en le re-melangeant lui aussi,
       .flatMap(e => [e, { ...deepcopy(e), id: uuid.v4() }]);
 
     this.cards.replace(this.shuffleArray(generatedCards) as CardItem[]);
