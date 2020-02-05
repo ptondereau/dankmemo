@@ -146,6 +146,9 @@
     "league/html-to-markdown": {
         "version": "4.9.1"
     },
+    "monolog/monolog": {
+        "version": "1.25.3"
+    },
     "nelmio/cors-bundle": {
         "version": "1.5",
         "recipe": {
@@ -355,6 +358,23 @@
     },
     "symfony/mime": {
         "version": "v4.4.2"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v4.4.4"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "5f5bdd0f0bd94eedc40ebf637d3c9fe9e48c9689"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
     },
     "symfony/options-resolver": {
         "version": "v4.4.2"
