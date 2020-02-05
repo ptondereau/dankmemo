@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import Header from './Header';
 import GameBoard from './GameBoard';
 import LeaderBoard from './LeaderBoard';
+import { observer } from 'mobx-react-lite';
+import useGameStore from '../hooks/useGameStore';
 
 const AppContainer = styled.div`
   display: flex;
@@ -20,18 +22,38 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
+const StartButton = styled.button`
+  background: transparent;
+  color: #ffffff;
+  font-size: 3em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid #ffffff;
+  border-radius: 3px;
+
+  &:hover {
+    background: #ffffff;
+    color: #000000;
+  }
+`;
+
 const App: React.FC = () => {
-  const [isGameStarted] = useState(false);
+  const { isStarted, toggleStarted } = useGameStore();
 
   return (
     <AppContainer>
       <Wrapper>
         <Header />
-        {isGameStarted && <GameBoard />}
-        {!isGameStarted && <LeaderBoard />}
+        {isStarted && <GameBoard />}
+        {!isStarted && (
+          <>
+            <StartButton onClick={toggleStarted}>Start</StartButton>
+            <LeaderBoard />
+          </>
+        )}
       </Wrapper>
     </AppContainer>
   );
 };
 
-export default App;
+export default observer(App);

@@ -4,7 +4,6 @@ import Score from './Score';
 import { useTopScoresLazyQuery } from '../graphql/components';
 
 const LeaderBoardContainer = styled.div`
-  height: 50vh;
   display: flex;
   align-items: center;
   flex-direction: column;

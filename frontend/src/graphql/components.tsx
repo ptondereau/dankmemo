@@ -1,7 +1,7 @@
 /* eslint-disable */
 import gql from 'graphql-tag';
-import * as React from 'react';
 import * as ApolloReactCommon from '@apollo/react-common';
+import * as React from 'react';
 import * as ApolloReactComponents from '@apollo/react-components';
 import * as ApolloReactHoc from '@apollo/react-hoc';
 import * as ApolloReactHooks from '@apollo/react-hooks';
@@ -126,6 +126,20 @@ export type UpdateScorePayload = {
   readonly clientMutationId: Maybe<Scalars['String']>;
 };
 
+export type SaveScoreMutationVariables = {
+  score: CreateScoreInput;
+};
+
+export type SaveScoreMutation = { readonly __typename?: 'Mutation' } & {
+  readonly createScore: Maybe<
+    { readonly __typename?: 'createScorePayload' } & {
+      readonly score: Maybe<
+        { readonly __typename?: 'Score' } & Pick<Score, 'id'>
+      >;
+    }
+  >;
+};
+
 export type ScoreQueryVariables = {
   id: Scalars['ID'];
 };
@@ -159,6 +173,96 @@ export type TopScoresQuery = { readonly __typename?: 'Query' } & {
   >;
 };
 
+export const SaveScoreDocument = gql`
+  mutation SaveScore($score: createScoreInput!) {
+    createScore(input: $score) {
+      score {
+        id
+      }
+    }
+  }
+`;
+export type SaveScoreMutationFn = ApolloReactCommon.MutationFunction<
+  SaveScoreMutation,
+  SaveScoreMutationVariables
+>;
+export type SaveScoreComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    SaveScoreMutation,
+    SaveScoreMutationVariables
+  >,
+  'mutation'
+>;
+
+export const SaveScoreComponent = (props: SaveScoreComponentProps) => (
+  <ApolloReactComponents.Mutation<SaveScoreMutation, SaveScoreMutationVariables>
+    mutation={SaveScoreDocument}
+    {...props}
+  />
+);
+
+export type SaveScoreProps<TChildProps = {}> = ApolloReactHoc.MutateProps<
+  SaveScoreMutation,
+  SaveScoreMutationVariables
+> &
+  TChildProps;
+export function withSaveScore<TProps, TChildProps = {}>(
+  operationOptions?: ApolloReactHoc.OperationOption<
+    TProps,
+    SaveScoreMutation,
+    SaveScoreMutationVariables,
+    SaveScoreProps<TChildProps>
+  >
+) {
+  return ApolloReactHoc.withMutation<
+    TProps,
+    SaveScoreMutation,
+    SaveScoreMutationVariables,
+    SaveScoreProps<TChildProps>
+  >(SaveScoreDocument, {
+    alias: 'saveScore',
+    ...operationOptions,
+  });
+}
+
+/**
+ * __useSaveScoreMutation__
+ *
+ * To run a mutation, you first call `useSaveScoreMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveScoreMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveScoreMutation, { data, loading, error }] = useSaveScoreMutation({
+ *   variables: {
+ *      score: // value for 'score'
+ *   },
+ * });
+ */
+export function useSaveScoreMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    SaveScoreMutation,
+    SaveScoreMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    SaveScoreMutation,
+    SaveScoreMutationVariables
+  >(SaveScoreDocument, baseOptions);
+}
+export type SaveScoreMutationHookResult = ReturnType<
+  typeof useSaveScoreMutation
+>;
+export type SaveScoreMutationResult = ApolloReactCommon.MutationResult<
+  SaveScoreMutation
+>;
+export type SaveScoreMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  SaveScoreMutation,
+  SaveScoreMutationVariables
+>;
 export const ScoreDocument = gql`
   query Score($id: ID!) {
     score(id: $id) {

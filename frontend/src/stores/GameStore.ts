@@ -16,6 +16,8 @@ export interface GameStoreInitialState {
   readonly cards: CardItem[];
   readonly firstCard: CardItem | null;
   readonly secondCard: CardItem | null;
+  readonly elapsedTime: number;
+  readonly isStarted: boolean;
 }
 
 export class GameStore {
@@ -23,6 +25,8 @@ export class GameStore {
 
   @observable public firstCard: CardItem | null;
   @observable public secondCard: CardItem | null;
+  @observable public elapsedTime: number = 0;
+  @observable public isStarted: boolean = false;
 
   constructor() {
     this.generateGame();
@@ -74,6 +78,16 @@ export class GameStore {
     this.secondCard = card;
   };
 
+  @action
+  public setElapsedTime = (time: number): void => {
+    this.elapsedTime = time;
+  };
+
+  @action
+  public toggleStarted = (): void => {
+    this.isStarted = !this.isStarted;
+  };
+
   protected shuffleArray = (
     array: Array<string | CardItem>
   ): Array<string | CardItem> => {
@@ -84,5 +98,7 @@ export class GameStore {
     cards: [],
     firstCard: null,
     secondCard: null,
+    elapsedTime: 0,
+    isStarted: false,
   });
 }

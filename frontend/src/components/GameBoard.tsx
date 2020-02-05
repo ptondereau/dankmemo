@@ -3,6 +3,8 @@ import styled from 'styled-components/macro';
 import Card from './Card';
 import useGameStore from '../hooks/useGameStore';
 import { observer } from 'mobx-react-lite';
+import { useSaveScoreMutation } from '../graphql/components';
+import Chrono from './Chrono';
 
 const GameBoardContainer = styled.div`
   min-height: 500px;
@@ -10,6 +12,7 @@ const GameBoardContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   padding: 0;
 `;
 
@@ -27,12 +30,16 @@ const GameBoard: React.FC = () => {
   const {
     cards,
     firstCard,
+    elapsedTime,
+    toggleStarted,
     secondCard,
     setCardCanFlip,
     setCardFlipped,
     setFirstSelectedCard,
     setSecondSelectedCard,
   } = useGameStore();
+
+  const [createScore] = useSaveScoreMutation();
 
   const resetFirstAndSecondCards = () => {
     setFirstSelectedCard(null);
@@ -73,15 +80,39 @@ const GameBoard: React.FC = () => {
   };
 
   useEffect(() => {
+    // Si on a 2 cartes retournees, on regarde si c'est une paire.
     if (firstCard && secondCard) {
       firstCard.imageSrc === secondCard.imageSrc
         ? onSuccessGuess()
         : onFailureGuess();
+
+      // on regarde si le joueur a fini la parti lorsque les 20 cartes sont retournees.
+      if (cards.filter(card => !card.flipped).length === 20) {
+        // on stop le chrono
+        toggleStarted();
+
+        // on demande le pseudo
+        const author = window.prompt(
+          'Felicitations ! Entrer votre pseudo pour figurer sur le leaders board :'
+        );
+
+        // on envoi le score a l'API
+        createScore({
+          variables: {
+            score: {
+              author: author || `user${Math.random()}`,
+              elapsedTime: String(elapsedTime),
+              clientMutationId: null,
+            },
+          },
+        }).then(r => window.location.reload()); // et on rafraichit la page pour recommencer
+      }
     }
   });
 
   return (
     <GameBoardContainer>
+      <Chrono />
       <CardsContainer>
         {cards.map(card => (
           <Card

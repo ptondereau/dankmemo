@@ -8,7 +8,7 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource
+ * @ApiResource(attributes={"order"={"elapsedTime": "ASC"}})
  * @ORM\Entity(repositoryClass="App\Repository\ScoreRepository")
  */
 class Score
