@@ -39,10 +39,7 @@ const HeaderTitle = styled.h1`
 const Header: React.FC = () => {
   return (
     <HeaderContainer>
-      <MemeMan
-        src={require('../assets/images/meme-man.png')}
-        alt="Meme man logo"
-      />
+      <MemeMan src="/images/thomas.png" alt="Thomas the train head" />
       <HeaderTitle>Dank Memo</HeaderTitle>
     </HeaderContainer>
   );
