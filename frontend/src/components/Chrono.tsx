@@ -14,7 +14,11 @@ const Chrono: React.FC = () => {
 
   return (
     <ChronoContainer>
-      <Timer initialTime={0} lastUnit="m">
+      <Timer
+        initialTime={0}
+        lastUnit="m"
+        formatValue={value => `${value < 10 ? `0${value}` : value}`}
+      >
         {({ getTime, stop }: { getTime: () => number; stop: () => void }) => {
           setElapsedTime(getTime());
 
