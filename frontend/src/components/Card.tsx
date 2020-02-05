@@ -81,7 +81,7 @@ const CardContainer = styled.div<{ flipped: boolean }>`
   height: 200px;
   cursor: pointer;
   perspective: 1000px;
-  margin: 30px;
+  margin: 15px;
   ${props =>
     !props.flipped &&
     css`
