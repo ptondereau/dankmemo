@@ -1,3 +1,3 @@
 cd ./frontend
-npm ci
-npm run build
+yarn install --production --frozen-lockfile
+yarn build
