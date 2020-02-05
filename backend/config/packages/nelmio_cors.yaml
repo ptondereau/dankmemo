@@ -10,6 +10,6 @@ nelmio_cors:
         '^/graphql':
             origin_regex: false
             allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
-            allow_headers: ['Content-Type', 'Authorization']
+            allow_headers: ['*']
             allow_methods: ['OPTIONS', 'POST']
             max_age: 3600
