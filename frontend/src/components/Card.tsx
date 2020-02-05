@@ -73,6 +73,7 @@ const CardFront = styled.div`
   background-size: 80px 140px;
   background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
   backface-visibility: hidden;
+  z-index: 1;
 `;
 
 const CardContainer = styled.div<{ flipped: boolean }>`
